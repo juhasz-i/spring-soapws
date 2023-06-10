@@ -1,4 +1,4 @@
-package com.spring.soapws.webservice.services;
+package com.spring.soapws.webservice.repositories;
 
 import com.spring.soapws.generated.Country;
 import com.spring.soapws.generated.Currency;

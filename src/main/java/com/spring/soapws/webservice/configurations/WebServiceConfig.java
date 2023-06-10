@@ -80,13 +80,26 @@ public class WebServiceConfig extends WsConfigurerAdapter {
      * @return
      */
     @Bean(name = "countries")
-    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema countriesSchema) {
+    public DefaultWsdl11Definition defaultWsdl11DefinitionForCountries(XsdSchema countriesSchema) {
         
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("CountriesPort");
         wsdl11Definition.setLocationUri("/ws");
         wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
         wsdl11Definition.setSchema(countriesSchema);
+        wsdl11Definition.setCreateSoap12Binding(true);
+        
+        return wsdl11Definition;
+    }
+    
+    @Bean(name = "mock")
+    public DefaultWsdl11Definition defaultWsdl11DefinitionForMock(XsdSchema mockSchema) {
+        
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("MockPort");
+        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setTargetNamespace("urn:com.namespace.mock");
+        wsdl11Definition.setSchema(mockSchema);
         wsdl11Definition.setCreateSoap12Binding(true);
         
         return wsdl11Definition;
@@ -101,6 +114,10 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
     }
     
+    @Bean
+    public XsdSchema mockSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("mock_message_scheme.xsd"));
+    }
     
     /**
      * The <code>CustomMessageDispatcherServlet</code> class extends <code>MessageDispatcherServlet</code> and

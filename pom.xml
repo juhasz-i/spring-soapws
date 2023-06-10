@@ -78,6 +78,7 @@
                     <sources>
                         <source>${project.basedir}/src/main/resources/countries.xsd</source>
                         <source>${project.basedir}/src/main/resources/mock_message_scheme.xsd</source>
+                        <source>${project.basedir}/src/main/resources/operation_response.xsd</source>
                     </sources>
                 </configuration>
             </plugin>
