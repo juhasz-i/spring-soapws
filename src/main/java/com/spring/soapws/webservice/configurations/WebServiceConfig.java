@@ -1,10 +1,9 @@
-package com.spring.soapws.configurations;
+package com.spring.soapws.webservice.configurations;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
@@ -107,11 +106,13 @@ public class WebServiceConfig extends WsConfigurerAdapter {
      * The name of this bean must be <code>messageDispatcherServlet</code>, which is the same as the default bean name.
      */
     public static class CustomMessageDispatcherServlet extends MessageDispatcherServlet {
+        
         @Override
         protected void initStrategies(ApplicationContext context) {
             super.initStrategies(context);
             setMessageFactoryBeanName("soapMessageFactory");
         }
+        
     }
     
 }

@@ -42,6 +42,12 @@
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.2</version>
         </dependency>
         
     </dependencies>
@@ -68,12 +74,40 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <packageName>com.spring.soapws.generated</packageName>
                     <sources>
                         <source>${project.basedir}/src/main/resources/countries.xsd</source>
                     </sources>
                 </configuration>
             </plugin>
-            
+
+<!--
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.15.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+&lt;!&ndash;                    The folder where the generated artifacts will be saved. &ndash;&gt;
+                    <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+&lt;!&ndash;                    The package name that the artifacts will use. &ndash;&gt;
+                    <generatePackage>com.spring.soapws.client.generated</generatePackage>
+&lt;!&ndash;                    The directory and file name for the WSDL. &ndash;&gt;
+                    <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
+                    <schemaIncludes>
+                        <include>countries.wsdl</include>
+                    </schemaIncludes>
+                </configuration>
+            </plugin>
+        -->
+        
         </plugins>
     </build>
 

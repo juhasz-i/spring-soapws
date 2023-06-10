@@ -1,8 +1,8 @@
-package com.spring.soapws.wsendpoints;
+package com.spring.soapws.webservice.wsendpoints;
 
-import com.spring.soapws.services.CountryRepository;
-import io.spring.guides.gs_producing_web_service.GetCountryRequest;
-import io.spring.guides.gs_producing_web_service.GetCountryResponse;
+import com.spring.soapws.generated.GetCountryRequest;
+import com.spring.soapws.generated.GetCountryResponse;
+import com.spring.soapws.webservice.services.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
