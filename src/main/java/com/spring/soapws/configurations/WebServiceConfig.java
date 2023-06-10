@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
+import org.springframework.ws.soap.SoapMessageFactory;
+import org.springframework.ws.soap.SoapVersion;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
@@ -44,14 +47,11 @@ public class WebServiceConfig extends WsConfigurerAdapter {
      * @return the <code>ServletRegistrationBean</code> instance, which is used to register the <code>MessageDispatcherServlet</code>.
      */
     @Bean
-    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
-        
-        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+    public ServletRegistrationBean<CustomMessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
+    
+        CustomMessageDispatcherServlet servlet = new CustomMessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
-        // It does the WSDL location servlet transformation.
-        // If you visit http://localhost:8080/ws/countries.wsdl, the soap:address will have the proper address.
-        // If you instead visit the WSDL from the public facing IP address assigned to your machine, you will see that address instead.
-        // This is useful when you want to publish your WSDL to a public facing IP address, but you want the service to be available on localhost.
+        // It makes the servlet handle requests to /ws/* by default (instead of /services/*).
         servlet.setTransformWsdlLocations(true);
         
         return new ServletRegistrationBean<>(servlet, "/ws/*");
@@ -78,6 +78,23 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     @Bean
     public XsdSchema countriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
+    }
+    
+    /**
+     * The <code>messageFactory</code> is used to set the SOAP version to 1.2. (by default, it is 1.1.).
+     * <p>
+     * The name of this bean must be <code>messageFactory</code>, which is the same as the default bean name.
+     *
+     * @return the <code>SaajSoapMessageFactory</code> instance, which is used to set the SOAP version to 1.2.
+     */
+    @Bean(name = "soapMessageFactory")
+    public SaajSoapMessageFactory messageFactory() {
+        
+        // SaajSoapMessageFactory is used to set the SOAP version to 1.2.
+        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
+        
+        return messageFactory;
     }
     
 }
