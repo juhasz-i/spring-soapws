@@ -92,7 +92,10 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
     
-    
+    /**
+     * The {@Code XsdSchema} instance is used by {@Code DefaultWsdl11Definition} to generate the WSDL.
+     * @return
+     */
     @Bean
     public XsdSchema countriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));

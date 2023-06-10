@@ -1,0 +1,26 @@
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="urn:com.namespace.mock"
+           targetNamespace="urn:com.namespace.mock">
+    
+    <xs:element name="request" type="tns:requestType" />
+    <xs:element name="syncResponse" type="xs:string" />
+    <xs:element name="asyncResponse" type="tns:asyncResponseType" />
+    
+    <xs:complexType name="requestType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="id" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="asyncResponseType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:long" name="delay" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>
