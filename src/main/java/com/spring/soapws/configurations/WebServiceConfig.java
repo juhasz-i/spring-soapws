@@ -4,10 +4,10 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
-import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.ws.soap.SoapVersion;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
@@ -33,6 +33,23 @@ import org.springframework.xml.xsd.XsdSchema;
 public class WebServiceConfig extends WsConfigurerAdapter {
     
     /**
+     * The <code>messageFactory</code> is used to set the SOAP version to 1.2. (by default, it is 1.1.).
+     * <p>
+     * The name of this bean must be <code>messageFactory</code>, which is the same as the default bean name.
+     *
+     * @return the <code>SaajSoapMessageFactory</code> instance, which is used to set the SOAP version to 1.2.
+     */
+    @Bean
+    public SaajSoapMessageFactory messageFactory() {
+        
+        // SaajSoapMessageFactory is used to set the SOAP version to 1.2.
+        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
+        
+        return messageFactory;
+    }
+    
+    /**
      * <p>
      * Spring WS uses a different servlet type for handling SOAP messages: <code>MessageDispatcherServlet</code>.
      * <p>
@@ -48,7 +65,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
      */
     @Bean
     public ServletRegistrationBean<CustomMessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
-    
+        
         CustomMessageDispatcherServlet servlet = new CustomMessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         // It makes the servlet handle requests to /ws/* by default (instead of /services/*).
@@ -71,30 +88,30 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         wsdl11Definition.setLocationUri("/ws");
         wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
         wsdl11Definition.setSchema(countriesSchema);
+        wsdl11Definition.setCreateSoap12Binding(true);
         
         return wsdl11Definition;
     }
+    
     
     @Bean
     public XsdSchema countriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
     }
     
+    
     /**
-     * The <code>messageFactory</code> is used to set the SOAP version to 1.2. (by default, it is 1.1.).
+     * The <code>CustomMessageDispatcherServlet</code> class extends <code>MessageDispatcherServlet</code> and
+     * overrides the <code>initStrategies</code> method to set the <code>soapMessageFactory</code> bean name.
      * <p>
-     * The name of this bean must be <code>messageFactory</code>, which is the same as the default bean name.
-     *
-     * @return the <code>SaajSoapMessageFactory</code> instance, which is used to set the SOAP version to 1.2.
+     * The name of this bean must be <code>messageDispatcherServlet</code>, which is the same as the default bean name.
      */
-    @Bean(name = "soapMessageFactory")
-    public SaajSoapMessageFactory messageFactory() {
-        
-        // SaajSoapMessageFactory is used to set the SOAP version to 1.2.
-        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
-        messageFactory.setSoapVersion(SoapVersion.SOAP_12);
-        
-        return messageFactory;
+    public static class CustomMessageDispatcherServlet extends MessageDispatcherServlet {
+        @Override
+        protected void initStrategies(ApplicationContext context) {
+            super.initStrategies(context);
+            setMessageFactoryBeanName("soapMessageFactory");
+        }
     }
     
 }

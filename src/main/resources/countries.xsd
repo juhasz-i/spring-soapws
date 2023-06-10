@@ -35,4 +35,5 @@
             <xs:enumeration value="PLN" />
         </xs:restriction>
     </xs:simpleType>
+    
 </xs:schema>
